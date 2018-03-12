@@ -1,0 +1,33 @@
+<script>
+// a class representing a dependency
+
+class Dep {
+  constructor () {
+    this.subscribers = new Set()
+  }
+
+  depend () { // this is the subscriber
+    if (activeUpdate) {
+      this.subscribers.add(activeUpdate)
+    }
+  }
+
+  notify () { // this is the publisher
+    this.subscribers.forEach(sub => sub())
+  }
+}
+
+let activeUpdate = null
+
+const dep = new Dep();
+const wrappedUpdate = () => {
+  activeUpdate = wrappedUpdate
+  dep.depend() // this added wrappedUpdate to sub
+  window.console.log('update')
+  activeUpdate = null
+}
+wrappedUpdate()
+
+dep.notify()
+
+</script>
